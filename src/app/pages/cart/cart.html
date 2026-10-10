@@ -1,0 +1,138 @@
+<section class="mx-auto max-w-6xl px-5 pt-10 pb-16">
+  @if (orderNumber(); as no) {
+    <!-- success -->
+    <div class="mx-auto max-w-md rounded-[2rem] bg-paper p-10 text-center shadow-soft ring-1 ring-sage-100">
+      <app-sticker name="cappuccino" class="mx-auto size-28" />
+      <h1 class="mt-6 text-3xl font-extrabold text-ink">سفارش شما ثبت شد</h1>
+      <p class="mt-3 leading-8 text-muted">
+        ممنون که Rosja را انتخاب کردید. سفارش شما در حال آماده‌سازی است.
+      </p>
+      <p class="mx-auto mt-5 w-fit rounded-full bg-sage-100 px-6 py-2 font-bold text-ink">
+        شماره سفارش: {{ fmt(no) }}
+      </p>
+      <a routerLink="/menu"
+         class="mt-8 inline-flex rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+        بازگشت به منو
+      </a>
+    </div>
+  } @else {
+    <div class="text-center">
+      <h1 class="text-4xl font-extrabold text-ink sm:text-5xl">سبد خرید</h1>
+      <p class="mt-2 text-muted">سفارش‌تان را بررسی و نهایی کنید.</p>
+    </div>
+
+    @if (cart.lines().length === 0) {
+      <!-- empty -->
+      <div class="mx-auto mt-10 max-w-md rounded-[2rem] bg-paper p-10 text-center shadow-soft ring-1 ring-sage-100">
+        <app-sticker name="cup" class="mx-auto size-28" />
+        <p class="mt-6 text-lg font-bold text-ink">سبد خرید شما خالی است</p>
+        <p class="mt-2 text-sm text-muted">از منو چیزی که دوست دارید انتخاب کنید.</p>
+        <a routerLink="/menu"
+           class="mt-6 inline-flex rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+          مشاهده منو
+        </a>
+      </div>
+    } @else {
+      <div class="mt-10 grid items-start gap-8 lg:grid-cols-[1.6fr_1fr]">
+        <!-- items -->
+        <div class="space-y-4">
+          @for (line of cart.lines(); track line.item.id) {
+            <article class="flex items-center gap-4 rounded-[2rem] bg-paper p-4 shadow-soft ring-1 ring-sage-100">
+              <div class="flex size-20 shrink-0 items-center justify-center rounded-[45%_55%_50%_50%/55%_45%_55%_45%] bg-sage-100">
+                <app-sticker [name]="line.item.icon" class="size-16" />
+              </div>
+
+              <div class="min-w-0 flex-1">
+                <h3 class="font-bold text-ink">{{ line.item.title }}</h3>
+                <p class="mt-0.5 text-xs text-muted">{{ fmt(line.item.price) }} تومان</p>
+
+                <div class="mt-3 flex items-center gap-2 rounded-full bg-sage-100 p-1 w-fit">
+                  <button type="button" (click)="cart.add(line.item.id)" aria-label="افزایش"
+                          class="size-7 rounded-full bg-olive text-cream">+</button>
+                  <span class="min-w-5 text-center text-sm font-bold">{{ fmt(line.qty) }}</span>
+                  <button type="button" (click)="cart.remove(line.item.id)" aria-label="کاهش"
+                          class="size-7 rounded-full bg-paper text-olive">−</button>
+                </div>
+              </div>
+
+              <div class="flex flex-col items-end gap-3 self-stretch justify-between">
+                <button type="button" (click)="cart.delete(line.item.id)" aria-label="حذف"
+                        class="rounded-full p-1.5 text-muted transition hover:bg-sage-100 hover:text-ink">
+                  <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" />
+                  </svg>
+                </button>
+                <p class="font-bold text-olive">{{ fmt(line.total) }} <span class="text-xs font-normal text-muted">تومان</span></p>
+              </div>
+            </article>
+          }
+
+          <div class="flex items-center justify-between px-2 pt-2 text-sm">
+            <a routerLink="/menu" class="font-medium text-olive hover:underline">→ افزودن مورد دیگر</a>
+            <button type="button" (click)="cart.clear()" class="text-muted transition hover:text-ink">خالی کردن سبد</button>
+          </div>
+        </div>
+
+        <!-- summary -->
+        <aside class="space-y-5 rounded-[2rem] bg-sage-100 p-6 lg:sticky lg:top-6">
+          <h2 class="text-xl font-extrabold text-ink">جزئیات سفارش</h2>
+
+          <div class="grid grid-cols-2 gap-1 rounded-full bg-paper p-1 text-sm font-medium">
+            <button type="button" (click)="orderType.set('dine')"
+                    [class]="orderType() === 'dine' ? 'bg-olive text-cream shadow-soft' : 'text-ink'"
+                    class="rounded-full py-2 transition">در کافه</button>
+            <button type="button" (click)="orderType.set('takeaway')"
+                    [class]="orderType() === 'takeaway' ? 'bg-olive text-cream shadow-soft' : 'text-ink'"
+                    class="rounded-full py-2 transition">بیرون‌بر</button>
+          </div>
+
+          @if (orderType() === 'dine') {
+            <label class="block text-sm">
+              <span class="mb-1.5 block font-medium text-ink">شماره میز</span>
+              <input type="text" inputmode="numeric" (input)="input(table, $event)" placeholder="مثلاً ۵"
+                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
+            </label>
+          } @else {
+            <label class="block text-sm">
+              <span class="mb-1.5 block font-medium text-ink">نام</span>
+              <input type="text" (input)="input(name, $event)" placeholder="نام شما"
+                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
+            </label>
+            <label class="block text-sm">
+              <span class="mb-1.5 block font-medium text-ink">شماره تماس</span>
+              <input type="tel" dir="ltr" (input)="input(phone, $event)" placeholder="09xxxxxxxxx"
+                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 text-end outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
+            </label>
+          }
+
+          <label class="block text-sm">
+            <span class="mb-1.5 block font-medium text-ink">توضیحات (اختیاری)</span>
+            <textarea rows="2" (input)="input(note, $event)" placeholder="مثلاً بدون شکر"
+                      class="w-full resize-none rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50"></textarea>
+          </label>
+
+          <dl class="space-y-2 border-t border-dashed border-sage-500/40 pt-4 text-sm">
+            <div class="flex justify-between text-muted">
+              <dt>تعداد</dt>
+              <dd>{{ fmt(cart.count()) }} مورد</dd>
+            </div>
+            <div class="flex justify-between text-lg font-extrabold text-ink">
+              <dt>جمع کل</dt>
+              <dd>{{ fmt(cart.subtotal()) }} <span class="text-xs font-normal text-muted">تومان</span></dd>
+            </div>
+          </dl>
+
+          <button type="button" (click)="submit()" [disabled]="!canSubmit()"
+                  class="w-full rounded-full bg-olive py-3.5 font-bold text-cream shadow-soft transition hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-40">
+            ثبت سفارش
+          </button>
+          @if (!canSubmit()) {
+            <p class="text-center text-xs text-muted">
+              {{ orderType() === 'dine' ? 'شماره میز را وارد کنید' : 'نام و شماره تماس را وارد کنید' }}
+            </p>
+          }
+        </aside>
+      </div>
+    }
+  }
+</section>

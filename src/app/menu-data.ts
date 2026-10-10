@@ -1,0 +1,63 @@
+import type { StickerName } from './ui/sticker';
+
+export type CategoryId = 'hot' | 'cold' | 'breakfast' | 'dessert' | 'other';
+
+export interface Category {
+  id: CategoryId | 'all';
+  title: string;
+  icon: StickerName;
+}
+
+export interface MenuItem {
+  id: string;
+  category: CategoryId;
+  title: string;
+  description: string;
+  price: number; // تومان
+  icon: StickerName;
+  badge?: 'جدید' | 'محبوب' | 'پیشنهاد سرآشپز';
+}
+
+export const CATEGORIES: Category[] = [
+  { id: 'all', title: 'همه', icon: 'leaf' },
+  { id: 'hot', title: 'قهوه گرم', icon: 'cup' },
+  { id: 'cold', title: 'قهوه سرد', icon: 'iced' },
+  { id: 'breakfast', title: 'صبحانه', icon: 'toast' },
+  { id: 'dessert', title: 'دسر و کیک', icon: 'cheesecake' },
+  { id: 'other', title: 'چای و نوشیدنی', icon: 'teapot' },
+];
+
+export const MENU_ITEMS: MenuItem[] = [
+  // قهوه گرم
+  { id: 'espresso', category: 'hot', title: 'اسپرسو', description: 'شات غلیظ و معطر از دانه‌های برشته‌ی تازه', price: 85000, icon: 'cup' },
+  { id: 'americano', category: 'hot', title: 'آمریکانو', description: 'اسپرسوی دوبل با آب داغ، سبک و ملایم', price: 95000, icon: 'cup' },
+  { id: 'cappuccino', category: 'hot', title: 'کاپوچینو', description: 'اسپرسو، شیر بخارداده و فوم ابریشمی', price: 125000, icon: 'cappuccino', badge: 'محبوب' },
+  { id: 'latte', category: 'hot', title: 'لاته', description: 'قهوه‌ی نرم با شیر و لایه‌ی نازک فوم', price: 135000, icon: 'latte' },
+  { id: 'flatwhite', category: 'hot', title: 'فلت وایت', description: 'اسپرسوی ریسترتو با شیر مخملی', price: 140000, icon: 'cappuccino' },
+  { id: 'mocha', category: 'hot', title: 'موکا', description: 'ترکیب قهوه، شکلات تلخ و شیر', price: 150000, icon: 'mug' },
+
+  // قهوه سرد
+  { id: 'icelatte', category: 'cold', title: 'آیس لاته', description: 'اسپرسو، شیر سرد و یخ فراوان', price: 145000, icon: 'iced', badge: 'محبوب' },
+  { id: 'iceamericano', category: 'cold', title: 'آیس آمریکانو', description: 'تازه، سبک و خنک برای روزهای گرم', price: 105000, icon: 'iced' },
+  { id: 'coldbrew', category: 'cold', title: 'کلد برو', description: 'دمای سرد و ۱۸ ساعت دم‌آوری آرام', price: 155000, icon: 'iced', badge: 'جدید' },
+  { id: 'affogato', category: 'cold', title: 'آفوگاتو', description: 'بستنی وانیلی با شات اسپرسوی داغ', price: 140000, icon: 'affogato' },
+
+  // صبحانه
+  { id: 'avocado-toast', category: 'breakfast', title: 'تست آووکادو و تخم‌مرغ', description: 'نان ترش، آووکادو، تخم‌مرغ پوچ و سبزی تازه', price: 260000, icon: 'toast', badge: 'پیشنهاد سرآشپز' },
+  { id: 'oatmeal', category: 'breakfast', title: 'بلغور جو دوسر با توت', description: 'جو دوسر گرم، توت‌های تازه و عسل', price: 210000, icon: 'bowl' },
+  { id: 'spinach-omelette', category: 'breakfast', title: 'املت اسفناج و پنیر', description: 'تخم‌مرغ محلی، اسفناج و پنیر پیتزا', price: 230000, icon: 'omelette' },
+  { id: 'syrniki', category: 'breakfast', title: 'سیرنیکی با خامه ترش', description: 'پنکیک پنیری به سبک روسی با مربای توت', price: 220000, icon: 'pancakes', badge: 'محبوب' },
+
+  // دسر و کیک
+  { id: 'cheesecake', category: 'dessert', title: 'چیزکیک نیویورکی', description: 'کرمی و غنی، با سس توت‌فرنگی', price: 180000, icon: 'cheesecake' },
+  { id: 'napoleon', category: 'dessert', title: 'کیک ناپلئون', description: 'لایه‌های ترد و کرم پاتیسری، دستور روسی اصیل', price: 190000, icon: 'napoleon', badge: 'جدید' },
+  { id: 'brownie', category: 'dessert', title: 'براونی شکلاتی', description: 'شکلات تلخ، گردو و کمی نمک دریایی', price: 160000, icon: 'brownie' },
+  { id: 'croissant', category: 'dessert', title: 'کروسان کره‌ای', description: 'تازه از فر؛ ساده یا با ژامبون و پنیر', price: 120000, icon: 'croissant' },
+  { id: 'tart', category: 'dessert', title: 'تارت توت', description: 'خمیر کره‌ای، کرم وانیل و توت‌های فصل', price: 175000, icon: 'tart' },
+
+  // چای و نوشیدنی
+  { id: 'samovar-tea', category: 'other', title: 'چای سماوری', description: 'چای سیاه دم‌کشیده با سماور، همراه مربا', price: 70000, icon: 'teapot', badge: 'پیشنهاد سرآشپز' },
+  { id: 'masala', category: 'other', title: 'چای ماسالا', description: 'ادویه‌های گرم، شیر و کمی شیرینی', price: 105000, icon: 'cup' },
+  { id: 'hot-chocolate', category: 'other', title: 'هات چاکلت', description: 'شکلات غلیظ با مارشمالو', price: 130000, icon: 'mug' },
+  { id: 'lemonade', category: 'other', title: 'لیموناد نعناع', description: 'لیمو تازه، نعناع و آب گازدار', price: 110000, icon: 'lemonade' },
+];

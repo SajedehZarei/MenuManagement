@@ -1,0 +1,60 @@
+<section class="relative mx-auto max-w-6xl overflow-hidden px-5 pt-8 pb-14 md:min-h-[calc(100dvh-8rem)]">
+  <h1 dir="ltr" aria-label="Rosja"
+      class="text-center font-display text-[clamp(4.5rem,22vw,15rem)] leading-[0.9] font-black tracking-tight text-ink select-none">
+    ROSJA
+  </h1>
+
+  <div class="grid items-center gap-10 md:grid-cols-[1fr_1.25fr_1fr]">
+    <!-- text -->
+    <div class="order-2 md:order-none">
+      <h2 class="text-3xl leading-[1.5] font-extrabold text-ink sm:text-4xl">
+        فراتر از یک<br />فنجان قهوه
+      </h2>
+      <p class="mt-4 max-w-xs leading-8 text-muted">
+        قهوه‌ی خوب، حال خوب. در روسیا هر فنجان یک لحظه‌ی کوچک خوشحالی است.
+      </p>
+      <a routerLink="/menu"
+         class="mt-6 inline-flex items-center gap-2 rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+        مشاهده منو <span aria-hidden="true">←</span>
+      </a>
+    </div>
+
+    <!-- cup -->
+    <div class="relative order-1 -mt-2 md:order-none md:-mt-16">
+      <img src="cup.webp" alt=""
+           class="mx-auto w-full max-w-xl drop-shadow-[0_25px_30px_rgba(85,42,18,0.25)] md:max-w-none md:scale-125" />
+    </div>
+
+    <!-- features -->
+    <ul class="order-3 mr-15 space-y-5 md:order-none">
+      @for (f of features; track f.title) {
+        <li class="flex items-center gap-5">
+          <span class="flex size-14 shrink-0 items-center justify-center rounded-full bg-olive"><app-sticker [name]="f.icon" class="size-9" /></span>
+          <span>
+            <span class="block font-bold text-ink">{{ f.title }}</span>
+            <span class="block text-xs leading-6 text-muted">{{ f.text }}</span>
+          </span>
+        </li>
+      }
+    </ul>
+  </div>
+
+  <div class="mt-8 flex items-end justify-center">
+    <p class="flex items-center gap-3 text-xs text-muted">
+      <span class="h-px w-16 bg-muted/50"></span>
+      قهوه / نوشیدنی / شیرینی
+      <span class="h-px w-16 bg-muted/50"></span>
+    </p>
+
+    <div class="relative size-24">
+    <svg viewBox="0 0 120 120" class="size-24 text-ink" aria-hidden="true" dir="ltr">
+      <defs>
+        <path id="circ" d="M60,60 m-44,0 a44,44 0 1,1 88,0 a44,44 0 1,1 -88,0" />
+      </defs>
+      <text font-size="10" letter-spacing="3" fill="currentColor" font-family="Fraunces, serif">
+        <textPath href="#circ">GOOD COFFEE · GOOD MOOD ·</textPath>
+      </text>
+    </svg>
+    </div>
+  </div>
+</section>
