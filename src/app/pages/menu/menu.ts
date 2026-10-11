@@ -1,12 +1,13 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../cart.service';
+import { ItemPhoto } from '../../ui/item-photo';
 import { Sticker } from '../../ui/sticker';
 import { CATEGORIES, CategoryId, MENU_ITEMS, MenuItem } from '../../menu-data';
 
 @Component({
   selector: 'app-menu',
-  imports: [Sticker, RouterLink],
+  imports: [Sticker, ItemPhoto, RouterLink],
   templateUrl: './menu.html',
 })
 export class MenuPage {

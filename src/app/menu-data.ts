@@ -15,6 +15,8 @@ export interface MenuItem {
   description: string;
   price: number; // تومان
   icon: StickerName;
+  /** optional photo path inside /public (default: menu/<id>.webp) */
+  image?: string;
   badge?: 'جدید' | 'محبوب' | 'پیشنهاد سرآشپز';
 }
 
@@ -30,6 +32,7 @@ export const CATEGORIES: Category[] = [
 export const MENU_ITEMS: MenuItem[] = [
   // قهوه گرم
   { id: 'espresso', category: 'hot', title: 'اسپرسو', description: 'شات غلیظ و معطر از دانه‌های برشته‌ی تازه', price: 85000, icon: 'cup' },
+  { id: 'double-espresso', category: 'hot', title: 'اسپرسو دوبل', description: 'دو شات اسپرسو با کرمای طلایی، همراه دانه‌ی قهوه', price: 105000, icon: 'cup' },
   { id: 'americano', category: 'hot', title: 'آمریکانو', description: 'اسپرسوی دوبل با آب داغ، سبک و ملایم', price: 95000, icon: 'cup' },
   { id: 'cappuccino', category: 'hot', title: 'کاپوچینو', description: 'اسپرسو، شیر بخارداده و فوم ابریشمی', price: 125000, icon: 'cappuccino', badge: 'محبوب' },
   { id: 'latte', category: 'hot', title: 'لاته', description: 'قهوه‌ی نرم با شیر و لایه‌ی نازک فوم', price: 135000, icon: 'latte' },
@@ -40,6 +43,7 @@ export const MENU_ITEMS: MenuItem[] = [
   { id: 'icelatte', category: 'cold', title: 'آیس لاته', description: 'اسپرسو، شیر سرد و یخ فراوان', price: 145000, icon: 'iced', badge: 'محبوب' },
   { id: 'iceamericano', category: 'cold', title: 'آیس آمریکانو', description: 'تازه، سبک و خنک برای روزهای گرم', price: 105000, icon: 'iced' },
   { id: 'coldbrew', category: 'cold', title: 'کلد برو', description: 'دمای سرد و ۱۸ ساعت دم‌آوری آرام', price: 155000, icon: 'iced', badge: 'جدید' },
+  { id: 'iced-mocha', category: 'cold', title: 'آیس موکا', description: 'اسپرسو، شیر سرد، سس شکلات و یخ', price: 150000, icon: 'iced', badge: 'جدید' },
   { id: 'affogato', category: 'cold', title: 'آفوگاتو', description: 'بستنی وانیلی با شات اسپرسوی داغ', price: 140000, icon: 'affogato' },
 
   // صبحانه
@@ -59,5 +63,6 @@ export const MENU_ITEMS: MenuItem[] = [
   { id: 'samovar-tea', category: 'other', title: 'چای سماوری', description: 'چای سیاه دم‌کشیده با سماور، همراه مربا', price: 70000, icon: 'teapot', badge: 'پیشنهاد سرآشپز' },
   { id: 'masala', category: 'other', title: 'چای ماسالا', description: 'ادویه‌های گرم، شیر و کمی شیرینی', price: 105000, icon: 'cup' },
   { id: 'hot-chocolate', category: 'other', title: 'هات چاکلت', description: 'شکلات غلیظ با مارشمالو', price: 130000, icon: 'mug' },
+  { id: 'iced-tea', category: 'other', title: 'آیس تی لیمو و نعناع', description: 'چای سیاه سرد با لیمو تازه و نعناع', price: 95000, icon: 'lemonade' },
   { id: 'lemonade', category: 'other', title: 'لیموناد نعناع', description: 'لیمو تازه، نعناع و آب گازدار', price: 110000, icon: 'lemonade' },
 ];

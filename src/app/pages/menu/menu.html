@@ -47,9 +47,8 @@
       @for (item of filtered(); track item.id) {
         <article class="group relative flex gap-4 rounded-[2rem] bg-paper p-4 shadow-soft ring-1 ring-sage-100 transition hover:-translate-y-1">
           <!-- plate -->
-          <div class="flex size-24 shrink-0 items-center justify-center rounded-[45%_55%_50%_50%/55%_45%_55%_45%] bg-sage-100">
-            <app-sticker [name]="item.icon" class="size-[4.5rem] transition duration-300 group-hover:scale-110"
-                         [class]="$index % 2 ? '-rotate-6' : 'rotate-6'" />
+          <div class="size-28 shrink-0 overflow-hidden rounded-[45%_55%_50%_50%/55%_45%_55%_45%] bg-sage-100 shadow-soft">
+            <app-item-photo [item]="item" class="transition duration-500 group-hover:scale-110" />
           </div>
 
           <div class="flex min-w-0 flex-1 flex-col">

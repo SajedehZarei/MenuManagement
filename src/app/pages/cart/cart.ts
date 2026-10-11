@@ -1,13 +1,14 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../cart.service';
+import { ItemPhoto } from '../../ui/item-photo';
 import { Sticker } from '../../ui/sticker';
 
 type OrderType = 'dine' | 'takeaway';
 
 @Component({
   selector: 'app-cart',
-  imports: [RouterLink, Sticker],
+  imports: [RouterLink, Sticker, ItemPhoto],
   templateUrl: './cart.html',
 })
 export class CartPage {
