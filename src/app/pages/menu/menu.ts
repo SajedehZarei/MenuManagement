@@ -1,6 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CartService } from '../../cart.service';
+import { CartService, lineKey } from '../../cart.service';
 import { ItemPhoto } from '../../ui/item-photo';
 import { Sticker } from '../../ui/sticker';
 import { CATEGORIES, CategoryId, MENU_ITEMS, MenuItem } from '../../menu-data';
@@ -37,6 +37,28 @@ export class MenuPage {
 
   protected onSearch(event: Event) {
     this.query.set((event.target as HTMLInputElement).value);
+  }
+
+  /** chosen variant per item id (defaults to the first option) */
+  private readonly chosen = signal<Record<string, string>>({});
+
+  protected optionId(item: MenuItem): string | undefined {
+    if (!item.options?.length) return undefined;
+    return this.chosen()[item.id] ?? item.options[0].id;
+  }
+
+  protected chooseOption(item: MenuItem, optionId: string) {
+    this.chosen.update((c) => ({ ...c, [item.id]: optionId }));
+  }
+
+  /** cart key of the item with its currently selected variant */
+  protected key(item: MenuItem): string {
+    return lineKey(item.id, this.optionId(item));
+  }
+
+  protected priceOf(item: MenuItem): number {
+    const id = this.optionId(item);
+    return item.options?.find((o) => o.id === id)?.price ?? item.price;
   }
 
   protected qty(id: string): number {

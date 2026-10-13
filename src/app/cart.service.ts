@@ -4,9 +4,18 @@ import { MENU_ITEMS, MenuItem } from './menu-data';
 const KEY = 'rosja-cart';
 
 export interface CartLine {
+  /** key used in the cart: `<id>` or `<id>:<optionId>` */
+  key: string;
   item: MenuItem;
+  optionLabel?: string;
+  unitPrice: number;
   qty: number;
   total: number;
+}
+
+/** Cart key for an item + (optional) variant. */
+export function lineKey(itemId: string, optionId?: string): string {
+  return optionId ? `${itemId}:${optionId}` : itemId;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -15,11 +24,20 @@ export class CartService {
 
   readonly lines = computed<CartLine[]>(() => {
     const q = this.quantities();
-    return MENU_ITEMS.filter((i) => q[i.id] > 0).map((item) => ({
-      item,
-      qty: q[item.id],
-      total: q[item.id] * item.price,
-    }));
+    const lines: CartLine[] = [];
+    for (const item of MENU_ITEMS) {
+      if (item.options?.length) {
+        for (const opt of item.options) {
+          const key = lineKey(item.id, opt.id);
+          const qty = q[key] ?? 0;
+          if (qty > 0) lines.push({ key, item, optionLabel: opt.label, unitPrice: opt.price, qty, total: qty * opt.price });
+        }
+      } else {
+        const qty = q[item.id] ?? 0;
+        if (qty > 0) lines.push({ key: item.id, item, unitPrice: item.price, qty, total: qty * item.price });
+      }
+    }
+    return lines;
   });
 
   readonly count = computed(() => this.lines().reduce((a, l) => a + l.qty, 0));

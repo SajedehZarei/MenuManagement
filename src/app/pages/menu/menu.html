@@ -62,23 +62,34 @@
             </div>
             <p class="mt-1 text-xs leading-6 text-muted">{{ item.description }}</p>
 
+            @if (item.options; as opts) {
+              <div class="mt-2 grid w-fit grid-flow-col gap-1 rounded-full bg-sage-100 p-1 text-xs font-medium" role="radiogroup" [attr.aria-label]="item.title">
+                @for (opt of opts; track opt.id) {
+                  <button type="button" role="radio" [attr.aria-checked]="optionId(item) === opt.id"
+                          (click)="chooseOption(item, opt.id)"
+                          [class]="optionId(item) === opt.id ? 'bg-olive text-cream shadow-soft' : 'text-ink'"
+                          class="rounded-full px-4 py-1 transition">{{ opt.label }}</button>
+                }
+              </div>
+            }
+
             <div class="mt-auto flex items-center justify-between pt-3">
               <span class="font-bold text-sage-700">
-                {{ fmt(item.price) }}
+                {{ fmt(priceOf(item)) }}
                 <span class="text-xs font-normal text-muted">تومان</span>
               </span>
 
-              @if (qty(item.id) === 0) {
-                <button type="button" (click)="add(item.id)"
+              @if (qty(key(item)) === 0) {
+                <button type="button" (click)="add(key(item))"
                         class="rounded-full bg-accent px-4 py-1.5 text-xs font-bold text-cream transition hover:bg-accent-dark">
                   افزودن
                 </button>
               } @else {
                 <div class="flex items-center gap-2 rounded-full bg-sage-100 p-1">
-                  <button type="button" (click)="add(item.id)" aria-label="افزایش"
+                  <button type="button" (click)="add(key(item))" aria-label="افزایش"
                           class="size-7 rounded-full bg-sage-700 text-cream">+</button>
-                  <span class="min-w-4 text-center text-sm font-bold">{{ fmt(qty(item.id)) }}</span>
-                  <button type="button" (click)="remove(item.id)" aria-label="کاهش"
+                  <span class="min-w-4 text-center text-sm font-bold">{{ fmt(qty(key(item))) }}</span>
+                  <button type="button" (click)="remove(key(item))" aria-label="کاهش"
                           class="size-7 rounded-full bg-paper text-sage-700">−</button>
                 </div>
               }

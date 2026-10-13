@@ -1,0 +1,34 @@
+<section class="mx-auto max-w-6xl px-5 pt-10 pb-16">
+  <div class="mx-auto max-w-md space-y-5 rounded-[2rem] bg-paper p-8 shadow-soft ring-1 ring-sage-100">
+    <p class="rounded-full bg-accent/10 px-4 py-1.5 text-center text-xs font-medium text-accent-dark">
+      درگاه پرداخت آزمایشی — هیچ مبلغی کسر نمی‌شود
+    </p>
+
+    <div class="text-center">
+      <h1 class="text-2xl font-extrabold text-ink">پرداخت آنلاین</h1>
+      <p class="mt-1 text-sm text-muted">کافه Rosja</p>
+    </div>
+
+    <dl class="space-y-2 rounded-2xl bg-sage-100 p-4 text-sm">
+      <div class="flex justify-between">
+        <dt class="text-muted">شماره سفارش</dt>
+        <dd class="font-bold text-ink">{{ fmt(+order) }}</dd>
+      </div>
+      <div class="flex justify-between text-lg font-extrabold text-ink">
+        <dt>مبلغ قابل پرداخت</dt>
+        <dd>{{ fmt(amount) }} <span class="text-xs font-normal text-muted">تومان</span></dd>
+      </div>
+    </dl>
+
+    <div class="space-y-3">
+      <button type="button" (click)="finish(true)"
+              class="w-full rounded-full bg-olive py-3.5 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+        پرداخت موفق
+      </button>
+      <button type="button" (click)="finish(false)"
+              class="w-full rounded-full border border-sage-200 bg-paper py-3.5 font-bold text-ink transition hover:bg-sage-50">
+        انصراف / پرداخت ناموفق
+      </button>
+    </div>
+  </div>
+</section>

@@ -8,6 +8,12 @@ export interface Category {
   icon: StickerName;
 }
 
+export interface MenuOption {
+  id: string;
+  label: string;
+  price: number; // تومان
+}
+
 export interface MenuItem {
   id: string;
   category: CategoryId;
@@ -18,40 +24,54 @@ export interface MenuItem {
   /** optional photo path inside /public (default: menu/<id>.webp) */
   image?: string;
   badge?: 'جدید' | 'محبوب' | 'پیشنهاد سرآشپز';
+  /** optional variants (e.g. single / double). The first one is the default. */
+  options?: MenuOption[];
 }
 
 export const CATEGORIES: Category[] = [
   { id: 'all', title: 'همه', icon: 'leaf' },
   { id: 'hot', title: 'قهوه گرم', icon: 'cup' },
   { id: 'cold', title: 'قهوه سرد', icon: 'iced' },
-  { id: 'breakfast', title: 'صبحانه', icon: 'toast' },
+  { id: 'breakfast', title: 'صبحانه و ساندویچ', icon: 'toast' },
   { id: 'dessert', title: 'دسر و کیک', icon: 'cheesecake' },
   { id: 'other', title: 'چای و نوشیدنی', icon: 'teapot' },
 ];
 
 export const MENU_ITEMS: MenuItem[] = [
   // قهوه گرم
-  { id: 'espresso', category: 'hot', title: 'اسپرسو', description: 'شات غلیظ و معطر از دانه‌های برشته‌ی تازه', price: 85000, icon: 'cup' },
-  { id: 'double-espresso', category: 'hot', title: 'اسپرسو دوبل', description: 'دو شات اسپرسو با کرمای طلایی، همراه دانه‌ی قهوه', price: 105000, icon: 'cup' },
+  {
+    id: 'espresso', category: 'hot', title: 'اسپرسو', description: 'شات غلیظ و معطر از دانه‌های برشته‌ی تازه', price: 85000, icon: 'cup',
+    options: [
+      { id: 'single', label: 'تک', price: 85000 },
+      { id: 'double', label: 'دبل', price: 105000 },
+    ],
+  },
   { id: 'americano', category: 'hot', title: 'آمریکانو', description: 'اسپرسوی دوبل با آب داغ، سبک و ملایم', price: 95000, icon: 'cup' },
   { id: 'cappuccino', category: 'hot', title: 'کاپوچینو', description: 'اسپرسو، شیر بخارداده و فوم ابریشمی', price: 125000, icon: 'cappuccino', badge: 'محبوب' },
   { id: 'latte', category: 'hot', title: 'لاته', description: 'قهوه‌ی نرم با شیر و لایه‌ی نازک فوم', price: 135000, icon: 'latte' },
   { id: 'flatwhite', category: 'hot', title: 'فلت وایت', description: 'اسپرسوی ریسترتو با شیر مخملی', price: 140000, icon: 'cappuccino' },
   { id: 'mocha', category: 'hot', title: 'موکا', description: 'ترکیب قهوه، شکلات تلخ و شیر', price: 150000, icon: 'mug' },
+  { id: 'cortado', category: 'hot', title: 'کورتادو', description: 'اسپرسو با کمی شیر گرم، متعادل و پرطعم', price: 130000, icon: 'cup', badge: 'جدید' },
+  { id: 'turkish-coffee', category: 'hot', title: 'قهوه ترک', description: 'دم‌آوری سنتی به سبک ترک، غلیظ و معطر', price: 100000, icon: 'cup', badge: 'جدید' },
+  { id: 'drip-coffee', category: 'hot', title: 'قهوه دمی', description: 'قهوه‌ی فیلتری ملایم و تمیز', price: 110000, icon: 'mug', badge: 'جدید' },
 
   // قهوه سرد
   { id: 'icelatte', category: 'cold', title: 'آیس لاته', description: 'اسپرسو، شیر سرد و یخ فراوان', price: 145000, icon: 'iced', badge: 'محبوب' },
   { id: 'iceamericano', category: 'cold', title: 'آیس آمریکانو', description: 'تازه، سبک و خنک برای روزهای گرم', price: 105000, icon: 'iced' },
   { id: 'coldbrew', category: 'cold', title: 'کلد برو', description: 'دمای سرد و ۱۸ ساعت دم‌آوری آرام', price: 155000, icon: 'iced', badge: 'جدید' },
   { id: 'iced-mocha', category: 'cold', title: 'آیس موکا', description: 'اسپرسو، شیر سرد، سس شکلات و یخ', price: 150000, icon: 'iced', badge: 'جدید' },
+  { id: 'iced-caramel', category: 'cold', title: 'آیس کارامل', description: 'اسپرسو، شیر سرد، سس کارامل و یخ', price: 155000, icon: 'iced' },
+  { id: 'iced-chocolate', category: 'cold', title: 'آیس چاکلت', description: 'شکلات غلیظ، شیر سرد و یخ فراوان', price: 150000, icon: 'iced' },
+  { id: 'frappuccino', category: 'cold', title: 'فراپوچینو', description: 'قهوه‌ی یخی بلندشده با خامه', price: 170000, icon: 'iced', badge: 'جدید' },
+  { id: 'matcha-cherry', category: 'cold', title: 'ماچا چری میلک', description: 'ماچای ژاپنی، شیر سرد و سس گیلاس', price: 165000, icon: 'iced', badge: 'جدید' },
   { id: 'affogato', category: 'cold', title: 'آفوگاتو', description: 'بستنی وانیلی با شات اسپرسوی داغ', price: 140000, icon: 'affogato' },
 
-  // صبحانه
-  { id: 'avocado-toast', category: 'breakfast', title: 'تست آووکادو و تخم‌مرغ', description: 'نان ترش، آووکادو، تخم‌مرغ پوچ و سبزی تازه', price: 260000, icon: 'toast', badge: 'پیشنهاد سرآشپز' },
-  { id: 'oatmeal', category: 'breakfast', title: 'بلغور جو دوسر با توت', description: 'جو دوسر گرم، توت‌های تازه و عسل', price: 210000, icon: 'bowl' },
-  { id: 'spinach-omelette', category: 'breakfast', title: 'املت اسفناج و پنیر', description: 'تخم‌مرغ محلی، اسفناج و پنیر پیتزا', price: 230000, icon: 'omelette' },
-  { id: 'syrniki', category: 'breakfast', title: 'سیرنیکی با خامه ترش', description: 'پنکیک پنیری به سبک روسی با مربای توت', price: 220000, icon: 'pancakes', badge: 'محبوب' },
-
+//صبحانه و ساندویچ
+  { id: 'bacon-croissant', category: 'breakfast', title: ' کروسان بیکن', description: 'کروسان کره‌ای، بیکن طلایی،دیپ ریحان و پنیر', price: 290000, icon: 'croissant' },
+  { id: 'chicken-croissant', category: 'breakfast', title: 'چیکن کروسان', description: 'کروسان تازه با مرغ گریل، پنیر', price: 290000, icon: 'croissant' },
+  { id: 'bacon-panini', category: 'breakfast', title: 'تست نیمرو بیکن', description: 'نان تست  گریل‌شده با پنیر ذوب‌شده، نیمرو و بیکن', price: 300000, icon: 'toast' },
+  { id: 'beef-ciabatta', category: 'breakfast', title: 'ساندویچ گوشت', description: 'چاپاتا ،گوشت گریل، پنیر و سس مخصوص', price: 330000, icon: 'toast', badge: 'پیشنهاد سرآشپز' },
+  { id: 'veggie-sandwich', category: 'breakfast', title: 'تست پنیر، خیار و گوجه', description:  'تست ، پنیز ، گوجه و خیار', price: 330000, icon: 'toast' },
   // دسر و کیک
   { id: 'cheesecake', category: 'dessert', title: 'چیزکیک نیویورکی', description: 'کرمی و غنی، با سس توت‌فرنگی', price: 180000, icon: 'cheesecake' },
   { id: 'napoleon', category: 'dessert', title: 'کیک ناپلئون', description: 'لایه‌های ترد و کرم پاتیسری، دستور روسی اصیل', price: 190000, icon: 'napoleon', badge: 'جدید' },
