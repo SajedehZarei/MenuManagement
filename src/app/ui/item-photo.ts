@@ -12,9 +12,9 @@ import { Sticker } from './sticker';
   imports: [Sticker],
   host: { class: 'flex size-full items-center justify-center overflow-hidden rounded-[inherit]' },
   template: `
-    @if (!failed()) {
+    @if (!failed() && item().image) {
       <img
-        [src]="src()"
+        [src]="item().image"
         [alt]="item().title"
         loading="lazy"
         (error)="failed.set(true)"
@@ -27,9 +27,4 @@ import { Sticker } from './sticker';
 export class ItemPhoto {
   readonly item = input.required<MenuItem>();
   protected readonly failed = signal(false);
-
-  protected src(): string {
-    const i = this.item();
-    return i.image ?? `menu/${i.id}.webp`;
-  }
 }

@@ -1,0 +1,109 @@
+<section class="mx-auto max-w-3xl px-5 pt-10 pb-16">
+  <div class="text-center">
+    <h1 class="text-4xl font-extrabold text-ink sm:text-5xl">پروفایل من</h1>
+    <p class="mt-2 text-muted">با شماره موبایل، وضعیت سفارش‌هایتان را ببینید.</p>
+  </div>
+
+  @if (!activePhone()) {
+    <!-- phone form -->
+    <form class="mx-auto mt-10 max-w-md rounded-[2rem] bg-paper p-8 shadow-soft ring-1 ring-sage-100"
+          (submit)="$event.preventDefault(); submit()">
+      <app-sticker name="cup" class="mx-auto size-24" />
+
+      <label class="mt-6 block text-sm font-bold text-ink" for="phone">شماره موبایل</label>
+      <input id="phone" type="tel" dir="ltr" inputmode="numeric" autocomplete="tel"
+             [value]="phoneInput()" (input)="input($event)" placeholder="09xxxxxxxxx"
+             class="mt-2 w-full rounded-2xl bg-cream px-4 py-3 text-ink outline-none ring-1 ring-sage-200 focus:ring-2 focus:ring-olive" />
+
+      @if (formError(); as err) {
+        <p class="mt-2 text-sm text-red-600">{{ err }}</p>
+      }
+
+      <button type="submit"
+              class="mt-6 w-full rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+        مشاهده سفارش‌ها
+      </button>
+    </form>
+  } @else {
+    <!-- header -->
+    <div class="mt-10 flex flex-wrap items-center justify-between gap-3 rounded-[2rem] bg-paper p-5 shadow-soft ring-1 ring-sage-100">
+      <div>
+        <p class="text-xs text-muted">شماره موبایل</p>
+        <p class="mt-1 font-bold text-ink" dir="ltr">{{ activePhone() }}</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" (click)="refresh()"
+                class="rounded-full bg-sage-100 px-4 py-2 text-sm font-medium text-olive transition hover:bg-sage-200">
+          {{ refreshing() ? 'در حال به‌روزرسانی...' : 'به‌روزرسانی' }}
+        </button>
+        <button type="button" (click)="changePhone()"
+                class="rounded-full bg-sage-100 px-4 py-2 text-sm font-medium text-olive transition hover:bg-sage-200">
+          تغییر شماره
+        </button>
+      </div>
+    </div>
+
+    @if (liveUnavailable()) {
+      <p class="mt-4 rounded-2xl bg-sage-100 px-4 py-3 text-sm text-muted">
+        وضعیت لحظه‌ای از سرور دریافت نشد؛ آخرین وضعیت ذخیره‌شده نمایش داده می‌شود.
+      </p>
+    }
+
+    <!-- orders -->
+    <div class="mt-6 space-y-5">
+      @for (o of orders(); track o.createdAt) {
+        <article class="rounded-[2rem] bg-paper p-6 shadow-soft ring-1 ring-sage-100">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="font-bold text-ink">
+                @if (o.orderNumber) { سفارش {{ o.orderNumber }} } @else { سفارش }
+              </h2>
+              <p class="mt-1 text-xs text-muted">{{ typeLabel(o) }} · {{ dateLabel(o.createdAt) }}</p>
+            </div>
+
+            @if (o.status === ORDER_STATUS.cancelled) {
+              <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-bold text-red-700">لغو شد</span>
+            } @else if (o.status === ORDER_STATUS.ready) {
+              <span class="rounded-full bg-olive px-3 py-1 text-xs font-bold text-cream">آماده تحویل</span>
+            }
+          </div>
+
+          <!-- items -->
+          <p class="mt-3 text-sm leading-7 text-muted">
+            @for (item of o.items; track $index) {
+              {{ item.title }} × {{ fmt(item.qty) }}@if (!$last) { ، }
+            }
+          </p>
+
+          <!-- timeline -->
+          @if (o.status !== ORDER_STATUS.cancelled) {
+            <ol class="mt-5 grid grid-cols-3 gap-2">
+              @for (step of STEPS; track step.status) {
+                <li class="text-center">
+                  <div class="mx-auto flex size-9 items-center justify-center rounded-full text-sm font-bold"
+                       [class]="o.status >= step.status ? 'bg-olive text-cream' : 'bg-sage-100 text-muted'">
+                    {{ o.status >= step.status ? '✓' : fmt(step.status) }}
+                  </div>
+                  <p class="mt-2 text-xs"
+                     [class]="o.status >= step.status ? 'font-bold text-ink' : 'text-muted'">
+                    {{ step.label }}
+                  </p>
+                </li>
+              }
+            </ol>
+          }
+        </article>
+      } @empty {
+        <div class="rounded-[2rem] bg-paper p-10 text-center shadow-soft ring-1 ring-sage-100">
+          <app-sticker name="cup" class="mx-auto size-24" />
+          <p class="mt-5 font-bold text-ink">سفارشی برای این شماره روی این دستگاه پیدا نشد</p>
+          <p class="mt-2 text-sm text-muted">سفارش‌هایی که از همین مرورگر ثبت می‌کنید اینجا نمایش داده می‌شوند.</p>
+          <a routerLink="/menu"
+             class="mt-6 inline-flex rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+            مشاهده منو
+          </a>
+        </div>
+      }
+    </div>
+  }
+</section>

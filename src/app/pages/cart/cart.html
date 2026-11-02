@@ -1,5 +1,5 @@
 <section class="mx-auto max-w-6xl px-5 pt-10 pb-16">
-  @if (orderNumber(); as no) {
+  @if (placed()) {
     <!-- success -->
     <div class="mx-auto max-w-md rounded-[2rem] bg-paper p-10 text-center shadow-soft ring-1 ring-sage-100">
       <app-sticker name="cappuccino" class="mx-auto size-28" />
@@ -7,13 +7,21 @@
       <p class="mt-3 leading-8 text-muted">
         ممنون که Rosja را انتخاب کردید. سفارش شما در حال آماده‌سازی است.
       </p>
-      <p class="mx-auto mt-5 w-fit rounded-full bg-sage-100 px-6 py-2 font-bold text-ink">
-        شماره سفارش: {{ fmt(no) }}
-      </p>
-      <a routerLink="/menu"
-         class="mt-8 inline-flex rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
-        بازگشت به منو
-      </a>
+      @if (orderNumber(); as no) {
+        <p class="mx-auto mt-5 w-fit rounded-full bg-sage-100 px-6 py-2 font-bold text-ink">
+          شماره سفارش: {{ no }}
+        </p>
+      }
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a routerLink="/profile"
+           class="inline-flex rounded-full bg-olive px-7 py-3 font-bold text-cream shadow-soft transition hover:bg-accent-dark">
+          پیگیری سفارش
+        </a>
+        <a routerLink="/menu"
+           class="inline-flex rounded-full bg-sage-100 px-7 py-3 font-bold text-olive transition hover:bg-sage-200">
+          بازگشت به منو
+        </a>
+      </div>
     </div>
   } @else {
     <div class="text-center">
@@ -80,41 +88,59 @@
 
         <!-- summary -->
         <aside class="space-y-5 rounded-[2rem] bg-sage-100 p-6 lg:sticky lg:top-6">
-          <h2 class="text-xl font-extrabold text-ink">جزئیات سفارش</h2>
 
-          <div class="grid grid-cols-2 gap-1 rounded-full bg-paper p-1 text-sm font-medium">
-            <button type="button" (click)="orderType.set('dine')"
-                    [class]="orderType() === 'dine' ? 'bg-olive text-cream shadow-soft' : 'text-ink'"
-                    class="rounded-full py-2 transition">در کافه</button>
-            <button type="button" (click)="orderType.set('takeaway')"
-                    [class]="orderType() === 'takeaway' ? 'bg-olive text-cream shadow-soft' : 'text-ink'"
-                    class="rounded-full py-2 transition">بیرون‌بر</button>
+
+          <div class="grid grid-cols-2 gap-3">
+            <label class="block text-sm">
+              <span class="mb-1.5 block font-medium text-ink">نام</span>
+              <input type="text" (input)="input(firstName, $event)" placeholder="نام"
+                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
+            </label>
+            <label class="block text-sm">
+              <span class="mb-1.5 block font-medium text-ink">نام خانوادگی</span>
+              <input type="text" (input)="input(lastName, $event)" placeholder="نام خانوادگی"
+                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
+            </label>
           </div>
+          <label class="block text-sm">
+            <span class="mb-1.5 block font-medium text-ink">شماره تماس</span>
+            <input type="tel" dir="ltr" (input)="input(phone, $event)" placeholder="09xxxxxxxxx"
+                   class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 text-end outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
+          </label>
 
-          @if (orderType() === 'dine') {
+                    <h2 class="text-xl font-extrabold text-ink">جزئیات سفارش</h2>
+
+          <fieldset class="text-sm">
+            <legend class="mb-1.5 block font-medium text-ink">نوع سفارش</legend>
+            <div class="grid grid-cols-3 gap-2">
+              <label class="flex cursor-pointer items-center gap-2 rounded-2xl border border-sage-200 bg-paper px-3 py-3 transition has-[:checked]:border-olive has-[:checked]:bg-sage-50">
+                <input type="radio" name="orderType" class="size-4 accent-olive"
+                       [value]="ORDER_TYPE.dineIn" [checked]="orderType() === ORDER_TYPE.dineIn"
+                       (change)="orderType.set(ORDER_TYPE.dineIn)" />
+                در کافه
+              </label>
+              <label class="flex cursor-pointer items-center gap-2 rounded-2xl border border-sage-200 bg-paper px-3 py-3 transition has-[:checked]:border-olive has-[:checked]:bg-sage-50">
+                <input type="radio" name="orderType" class="size-4 accent-olive"
+                       [value]="ORDER_TYPE.takeaway" [checked]="orderType() === ORDER_TYPE.takeaway"
+                       (change)="orderType.set(ORDER_TYPE.takeaway)" />
+                بیرون‌بر
+              </label>
+              <label class="flex cursor-pointer items-center gap-2 rounded-2xl border border-sage-200 bg-paper px-3 py-3 transition has-[:checked]:border-olive has-[:checked]:bg-sage-50">
+                <input type="radio" name="orderType" class="size-4 accent-olive"
+                       [value]="ORDER_TYPE.delivery" [checked]="orderType() === ORDER_TYPE.delivery"
+                       (change)="orderType.set(ORDER_TYPE.delivery)" />
+                ارسال
+              </label>
+            </div>
+          </fieldset>
+
+          @if (orderType() === ORDER_TYPE.dineIn) {
             <label class="block text-sm">
               <span class="mb-1.5 block font-medium text-ink">شماره میز</span>
               <input type="text" inputmode="numeric" (input)="input(table, $event)" placeholder="مثلاً ۵"
                      class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
             </label>
-          } @else {
-            <label class="block text-sm">
-              <span class="mb-1.5 block font-medium text-ink">نام</span>
-              <input type="text" (input)="input(name, $event)" placeholder="نام شما"
-                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
-            </label>
-            <label class="block text-sm">
-              <span class="mb-1.5 block font-medium text-ink">شماره تماس</span>
-              <input type="tel" dir="ltr" (input)="input(phone, $event)" placeholder="09xxxxxxxxx"
-                     class="w-full rounded-2xl border border-sage-200 bg-paper px-4 py-3 text-end outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50" />
-            </label>
           }
-
-          <label class="block text-sm">
-            <span class="mb-1.5 block font-medium text-ink">توضیحات (اختیاری)</span>
-            <textarea rows="2" (input)="input(note, $event)" placeholder="مثلاً بدون شکر"
-                      class="w-full resize-none rounded-2xl border border-sage-200 bg-paper px-4 py-3 outline-none transition focus:border-sage-500 focus:ring-4 focus:ring-sage-50"></textarea>
-          </label>
 
           <dl class="space-y-2 border-t border-dashed border-sage-500/40 pt-4 text-sm">
             <div class="flex justify-between text-muted">
@@ -127,25 +153,15 @@
             </div>
           </dl>
 
-          <button type="button" (click)="submit()" [disabled]="!canSubmit() || paying()"
+          <button type="button" (click)="submit()" [disabled]="!canSubmit() || sending()"
                   class="w-full rounded-full bg-olive py-3.5 font-bold text-cream shadow-soft transition hover:bg-accent-dark disabled:cursor-not-allowed disabled:opacity-40">
-            @if (paying()) {
-              در حال انتقال به درگاه…
-            } @else if (orderType() === 'takeaway') {
-              پرداخت آنلاین و ثبت سفارش
-            } @else {
-              ثبت سفارش
-            }
+            {{ sending() ? 'در حال ثبت سفارش…' : 'ثبت سفارش' }}
           </button>
-          @if (payError(); as err) {
+          @if (error(); as err) {
             <p class="text-center text-xs font-medium text-red-700" role="alert">{{ err }}</p>
           }
           @if (!canSubmit()) {
-            <p class="text-center text-xs text-muted">
-              {{ orderType() === 'dine' ? 'شماره میز را وارد کنید' : 'نام و شماره تماس را وارد کنید' }}
-            </p>
-          } @else if (orderType() === 'takeaway') {
-            <p class="text-center text-xs text-muted">سفارش بیرون‌بر با پرداخت آنلاین ثبت می‌شود.</p>
+            <p class="text-center text-xs text-muted">{{ hint() }}</p>
           }
         </aside>
       </div>

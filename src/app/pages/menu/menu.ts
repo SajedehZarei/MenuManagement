@@ -3,7 +3,8 @@ import { RouterLink } from '@angular/router';
 import { CartService, lineKey } from '../../cart.service';
 import { ItemPhoto } from '../../ui/item-photo';
 import { Sticker } from '../../ui/sticker';
-import { CATEGORIES, CategoryId, MENU_ITEMS, MenuItem } from '../../menu-data';
+import { ALL_CATEGORY, Category, CategoryId, MenuItem } from '../../menu-data';
+import { MenuStore } from '../../menu-store';
 
 @Component({
   selector: 'app-menu',
@@ -11,8 +12,14 @@ import { CATEGORIES, CategoryId, MENU_ITEMS, MenuItem } from '../../menu-data';
   templateUrl: './menu.html',
 })
 export class MenuPage {
-  protected readonly categories = CATEGORIES;
-  protected readonly items = MENU_ITEMS;
+  private readonly store = inject(MenuStore);
+  protected readonly categories = computed<Category[]>(() => [ALL_CATEGORY, ...this.store.categories()]);
+  protected readonly items = this.store.items;
+  protected readonly loading = this.store.loading;
+  protected readonly error = this.store.error;
+  protected reload() {
+    this.store.load();
+  }
 
 
   protected readonly activeCategory = signal<CategoryId | 'all'>('all');
@@ -24,7 +31,7 @@ export class MenuPage {
   protected readonly filtered = computed<MenuItem[]>(() => {
     const cat = this.activeCategory();
     const q = this.query().trim();
-    return this.items.filter(
+    return this.items().filter(
       (i) =>
         (cat === 'all' || i.category === cat) &&
         (!q || i.title.includes(q) || i.description.includes(q)),

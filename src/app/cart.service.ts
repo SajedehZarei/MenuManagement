@@ -1,5 +1,6 @@
-import { Injectable, computed, effect, signal } from '@angular/core';
-import { MENU_ITEMS, MenuItem } from './menu-data';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { MenuItem } from './menu-data';
+import { MenuStore } from './menu-store';
 
 const KEY = 'rosja-cart';
 
@@ -20,12 +21,13 @@ export function lineKey(itemId: string, optionId?: string): string {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
+  private readonly store = inject(MenuStore);
   private readonly quantities = signal<Record<string, number>>(this.load());
 
   readonly lines = computed<CartLine[]>(() => {
     const q = this.quantities();
     const lines: CartLine[] = [];
-    for (const item of MENU_ITEMS) {
+    for (const item of this.store.items()) {
       if (item.options?.length) {
         for (const opt of item.options) {
           const key = lineKey(item.id, opt.id);
